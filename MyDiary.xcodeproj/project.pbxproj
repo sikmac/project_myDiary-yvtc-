@@ -7,14 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3921507C1F30AAE200C4F31F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3921507B1F30AAE200C4F31F /* AddViewController.swift */; };
+		3921507E1F30B74800C4F31F /* SQLiteConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3921507D1F30B74800C4F31F /* SQLiteConnect.swift */; };
+		39458F491F3162A900915FD5 /* TableViewCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39458F481F3162A900915FD5 /* TableViewCellController.swift */; };
+		39458F4E1F31674800915FD5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39458F4D1F31674800915FD5 /* SettingsViewController.swift */; };
+		39458F521F3170B100915FD5 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39458F511F3170B100915FD5 /* PostViewController.swift */; };
+		395E152C1F30506300A01F43 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 395E152B1F30506300A01F43 /* libsqlite3.tbd */; };
 		399CCC171F06B43D00AF605D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399CCC161F06B43D00AF605D /* AppDelegate.swift */; };
 		399CCC191F06B43D00AF605D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399CCC181F06B43D00AF605D /* ViewController.swift */; };
 		399CCC1C1F06B43D00AF605D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 399CCC1A1F06B43D00AF605D /* Main.storyboard */; };
 		399CCC1E1F06B43D00AF605D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 399CCC1D1F06B43D00AF605D /* Assets.xcassets */; };
 		399CCC211F06B43D00AF605D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 399CCC1F1F06B43D00AF605D /* LaunchScreen.storyboard */; };
+		39B0A5071F07987900EC8943 /* 2105175_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 39B0A5061F07987900EC8943 /* 2105175_1.png */; };
+		39CAFA6F1F0C7B5C0035B241 /* CollectionVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CAFA6E1F0C7B5C0035B241 /* CollectionVController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3921507B1F30AAE200C4F31F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
+		3921507D1F30B74800C4F31F /* SQLiteConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteConnect.swift; sourceTree = "<group>"; };
+		39458F481F3162A900915FD5 /* TableViewCellController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellController.swift; sourceTree = "<group>"; };
+		39458F4D1F31674800915FD5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		39458F511F3170B100915FD5 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
+		395E152B1F30506300A01F43 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		395E152E1F3050AA00A01F43 /* MyDiary-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "MyDiary-Bridging-Header.h"; path = "MyDiary/MyDiary-Bridging-Header.h"; sourceTree = "<group>"; };
 		399CCC131F06B43D00AF605D /* MyDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		399CCC161F06B43D00AF605D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		399CCC181F06B43D00AF605D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +37,8 @@
 		399CCC1D1F06B43D00AF605D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		399CCC201F06B43D00AF605D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		399CCC221F06B43D00AF605D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		39B0A5061F07987900EC8943 /* 2105175_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2105175_1.png; sourceTree = "<group>"; };
+		39CAFA6E1F0C7B5C0035B241 /* CollectionVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionVController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,15 +46,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				395E152C1F30506300A01F43 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		39458F4A1F31661B00915FD5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				399CCC181F06B43D00AF605D /* ViewController.swift */,
+				39CAFA6E1F0C7B5C0035B241 /* CollectionVController.swift */,
+				39458F4D1F31674800915FD5 /* SettingsViewController.swift */,
+				3921507B1F30AAE200C4F31F /* AddViewController.swift */,
+				39458F481F3162A900915FD5 /* TableViewCellController.swift */,
+				39458F511F3170B100915FD5 /* PostViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		395E152A1F30506300A01F43 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				395E152E1F3050AA00A01F43 /* MyDiary-Bridging-Header.h */,
+				395E152B1F30506300A01F43 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		399CCC0A1F06B43D00AF605D = {
 			isa = PBXGroup;
 			children = (
+				395E152A1F30506300A01F43 /* Frameworks */,
 				399CCC151F06B43D00AF605D /* MyDiary */,
 				399CCC141F06B43D00AF605D /* Products */,
 			);
@@ -54,12 +95,14 @@
 		399CCC151F06B43D00AF605D /* MyDiary */ = {
 			isa = PBXGroup;
 			children = (
+				39458F4A1F31661B00915FD5 /* Controllers */,
+				39B0A5061F07987900EC8943 /* 2105175_1.png */,
 				399CCC161F06B43D00AF605D /* AppDelegate.swift */,
-				399CCC181F06B43D00AF605D /* ViewController.swift */,
 				399CCC1A1F06B43D00AF605D /* Main.storyboard */,
 				399CCC1D1F06B43D00AF605D /* Assets.xcassets */,
 				399CCC1F1F06B43D00AF605D /* LaunchScreen.storyboard */,
 				399CCC221F06B43D00AF605D /* Info.plist */,
+				3921507D1F30B74800C4F31F /* SQLiteConnect.swift */,
 			);
 			path = MyDiary;
 			sourceTree = "<group>";
@@ -97,6 +140,7 @@
 					399CCC121F06B43D00AF605D = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = UD7RWWZ7ML;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -125,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				399CCC211F06B43D00AF605D /* LaunchScreen.storyboard in Resources */,
+				39B0A5071F07987900EC8943 /* 2105175_1.png in Resources */,
 				399CCC1E1F06B43D00AF605D /* Assets.xcassets in Resources */,
 				399CCC1C1F06B43D00AF605D /* Main.storyboard in Resources */,
 			);
@@ -137,8 +182,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39458F521F3170B100915FD5 /* PostViewController.swift in Sources */,
 				399CCC191F06B43D00AF605D /* ViewController.swift in Sources */,
+				39CAFA6F1F0C7B5C0035B241 /* CollectionVController.swift in Sources */,
+				39458F4E1F31674800915FD5 /* SettingsViewController.swift in Sources */,
+				3921507C1F30AAE200C4F31F /* AddViewController.swift in Sources */,
+				3921507E1F30B74800C4F31F /* SQLiteConnect.swift in Sources */,
 				399CCC171F06B43D00AF605D /* AppDelegate.swift in Sources */,
+				39458F491F3162A900915FD5 /* TableViewCellController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,11 +314,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = UD7RWWZ7ML;
 				INFOPLIST_FILE = MyDiary/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SIKMAC.MyDiary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MyDiary/MyDiary-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -276,11 +330,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = UD7RWWZ7ML;
 				INFOPLIST_FILE = MyDiary/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SIKMAC.MyDiary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MyDiary/MyDiary-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -304,6 +360,7 @@
 				399CCC271F06B43D00AF605D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,13 +1,14 @@
 import UIKit
 
-class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate, UITextFieldDelegate {
+class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let myFormatter = DateFormatter()
     
-    weak var tableViewController: ViewController!    //記錄上一頁的執行實體
+    var db:OpaquePointer? = nil
+    weak var tableViewController:ViewController!    //記錄上一頁的執行實體
     var currentTextObjectYPosition:CGFloat = 0    //記錄目前輸入元件的Y軸底緣位置
     var myDatePicker :UIDatePicker!
-    var db:OpaquePointer? = nil
+    var myRecords = [[String:Any?]]()    //記錄查詢到的資料表（離線資料集）
     
     @IBOutlet weak var imgPicture: UIImageView!
     @IBOutlet weak var txtView: UITextView!
@@ -22,24 +23,13 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINav
         }
         
         txtDate.delegate = self
-        
         self.title = "新增"
         myFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-        // 日期輸入框
-//        txtDate = UITextField(frame: CGRect(x: 0.0, y: height * 2.9, width: fullsize.width, height: height))
-//        txtDate.backgroundColor = UIColor.init(red: 0.05, green: 0.05, blue: 0.05, alpha: 1)
-//        txtDate.textAlignment = .center
-//        txtDate.textColor = UIColor.white
-//        txtDate.font = UIFont(name: "Helvetica Light", size: 32.0)
-//        txtDate.text = record.createTime
-//        txtDate.tag = 503
-//        self.view.addSubview(txtDate)
         
         // UIDatePicker
         myDatePicker = UIDatePicker()
         myDatePicker.datePickerMode = .dateAndTime
         myDatePicker.locale = Locale(identifier: "zh_TW")
-//                myDatePicker.date = myFormatter.date(from: record.createTime!)!
         txtDate.inputView = myDatePicker
         
         // UIDatePicker 取消及完成按鈕
@@ -68,30 +58,13 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINav
     // 選取日期時 按下完成
     func doneTouched(_ sender:UIBarButtonItem) {
         txtDate.text = myFormatter.string(from: myDatePicker.date)
-//        record.createTime = date
         closeKeyBoard()
     }
-    
     // 選取日期時 按下取消
     func cancelTouched(_ sender:UIBarButtonItem) {
         closeKeyBoard()
     }
     // MARK: UITextField Delegate Methods
-    // 按下 return 鍵
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        // 事由欄位輸入時 點擊鍵盤[下一個]按鈕會跳往選取時間
-//        let title = self.view.viewWithTag(502) as! UITextField
-//        let date = self.view.viewWithTag(503) as! UITextField
-//        
-//        title.resignFirstResponder()
-//        date.becomeFirstResponder()
-//        
-//        return true
-//    }
-    // 按空白處會隱藏編輯狀態
-//    func hideKeyboard(_ tapG:UITapGestureRecognizer?) {
-//        self.view.endEditing(true)
-//    }
     // 儲存功能
     func btnSaveAction() {
         //進行輸入資料檢查
@@ -101,35 +74,43 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINav
             present(alert, animated: true, completion: nil)
             return  //直接離開函式
         }
+        
+        let createTime = myFormatter.string(from: Date())
+        let yearMonth = (createTime as NSString).substring(to: 7)
+        let createDate = (createTime as NSString).substring(to: 10)
+        
         //檢查資料庫連線
         if db != nil {
+            var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
             let imageData = UIImageJPEGRepresentation(imgPicture.image!, 0.8)! as NSData    //準備要存入的圖片
-            let sql = String(format: "insert into records(CreateDate,photo,TextView) values('%@',?,'%@')", txtDate.text!, txtView.text!)    //準備SQL的插入指令
-            print("新增指令：\(sql)")
-            let cSql = sql.cString(using: .utf8)    //把SQL指令轉成C語言字串
-            var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數            
-            sqlite3_prepare(db, cSql, -1, &statement, nil)    //準備執行SQL指令
+            let sql = String(format: "insert into records (CreateDate,YearMonth,photo,TextView,CreateTime) values ('%@','%@',?,'%@','%@')", createDate, yearMonth, txtView.text!, createTime)    //準備SQL的插入指令
+//            let cSql = sql.cString(using: .utf8)    //把SQL指令轉成C語言字串
+//            var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
+            sqlite3_prepare_v2(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)     //準備執行SQL指令
             //將照片存入資料庫欄位（第二個參數1，指的是SQL指令?所在的位置，此位置從1起算）
             sqlite3_bind_blob(statement, 1, imageData.bytes, Int32(imageData.length), nil)
             //執行SQL指令
             if sqlite3_step(statement) == SQLITE_DONE {
-                print("資料新增成功！")
+//                print("資料新增成功！")
+                print("新增指令：\(sql)")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增成功！", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "確定", style: .default, handler: nil))
                 present(alert, animated: true, completion: nil)
-                //直接更改上一頁的離線資料集arrTable
+                
                 //新加一筆上一頁的離線資料
                 let newDicRow:[String: Any?] = [
-                    "CreateDate":txtDate.text,
+                    "CreateDate":"'\(createDate)'",    //"CreateDate":txtDate.text
+                    "YearMonth":"'\(yearMonth)'",
                     "photo":UIImageJPEGRepresentation(imgPicture.image!, 0.7),
-                    "TextView":txtView.text
+                    "TextView":txtView.text,
+                    "CreateTime":"'\(createTime)'"
 //                    "address":txtAdress.text,
 //                    "phone":txtPhone.text,
 //                    "email":txtEmail.text,
 //                    "gender":pkvGender.selectedRow(inComponent: 0),
 //                    "class":arrClass[pkvClass.selectedRow(inComponent: 0)],
 //                    "name":txtDate.text
-                    ]
+                ]
                 tableViewController.myRecords.append(newDicRow)
             } else {
                 print("資料新增失敗！")
@@ -137,31 +118,21 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINav
                 alert.addAction(UIAlertAction(title: "確定", style: .destructive, handler: nil))
                 present(alert, animated: true, completion: nil)
             }
-            //關閉連線指令
-            sqlite3_finalize(statement)
+            sqlite3_finalize(statement)    //關閉連線指令
         }
     }
     //MARK: UIImagePickerControllerDelegate
     //影像挑選控制器完成影像挑選時
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("info=\(info)")
+//        print("info=\(info)")
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage    //取得拍照或相簿中的相片
         imgPicture.image = image    //將取得的照片，顯示於照片欄位
         picker.dismiss(animated: true, completion: nil)    //移除影像挑選控制器
-    }
-    
-    // UIDatePicker
-//    @IBAction func btnDatePicker(_ sender: UIButton) {
-//        myDatePicker = UIDatePicker()
-//        myDatePicker.datePickerMode = .dateAndTime
-//        myDatePicker.locale = Locale(identifier: "zh_TW")
-////                myDatePicker.date = myFormatter.date(from: record.createTime!)!
-//        txtDate.inputView = myDatePicker
-//    }
+    }    
     //由鍵盤彈出通知呼叫的函式
     func keyboardWillShow(_ sender:Notification) {
         print("鍵盤彈出")
-        print("userInfo=\(String(describing: sender.userInfo))")
+//        print("userInfo=\(String(describing: sender.userInfo))")
         if let keyboardHeight = (sender.userInfo?["UIKeyboardFrameEndUserInfoKey"] as? NSValue)?.cgRectValue.size.height {
             print("鍵盤高度：\(keyboardHeight)")
             let visiableHeight = self.view.frame.size.height - keyboardHeight    //計算可視高度
@@ -173,7 +144,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINav
     }
     //由鍵盤收合通知呼叫的函式
     func keyboardWillHide() {
-        print("鍵盤收合")
+//        print("鍵盤收合")
         self.view.frame.origin.y = 0    //Y軸移回原點
     }
     //由點按手勢呼叫
@@ -203,7 +174,6 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate,UINav
     @IBAction func btnPhotoAlbum(_ sender: UIButton) {
         //檢查裝置是否有相簿
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            
             let imagePickerController = UIImagePickerController()    //初始化影像挑選控制器
             imagePickerController.sourceType = .photoLibrary    //指定影像挑選控制器為相簿
             imagePickerController.delegate = self    //指定影像挑選控制器的代理人

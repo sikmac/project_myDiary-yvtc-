@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39152AE71F37FF02001ADB1C /* SQLiteConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39152AE61F37FF02001ADB1C /* SQLiteConnect.swift */; };
 		3921507C1F30AAE200C4F31F /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3921507B1F30AAE200C4F31F /* AddViewController.swift */; };
-		3921507E1F30B74800C4F31F /* SQLiteConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3921507D1F30B74800C4F31F /* SQLiteConnect.swift */; };
 		39458F491F3162A900915FD5 /* TableViewCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39458F481F3162A900915FD5 /* TableViewCellController.swift */; };
 		39458F4E1F31674800915FD5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39458F4D1F31674800915FD5 /* SettingsViewController.swift */; };
 		39458F521F3170B100915FD5 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39458F511F3170B100915FD5 /* PostViewController.swift */; };
@@ -23,8 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		39152AE61F37FF02001ADB1C /* SQLiteConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteConnect.swift; sourceTree = "<group>"; };
 		3921507B1F30AAE200C4F31F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
-		3921507D1F30B74800C4F31F /* SQLiteConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteConnect.swift; sourceTree = "<group>"; };
 		39458F481F3162A900915FD5 /* TableViewCellController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellController.swift; sourceTree = "<group>"; };
 		39458F4D1F31674800915FD5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		39458F511F3170B100915FD5 /* PostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
@@ -58,10 +58,11 @@
 			children = (
 				399CCC181F06B43D00AF605D /* ViewController.swift */,
 				39CAFA6E1F0C7B5C0035B241 /* CollectionVController.swift */,
+				39458F481F3162A900915FD5 /* TableViewCellController.swift */,
 				39458F4D1F31674800915FD5 /* SettingsViewController.swift */,
 				3921507B1F30AAE200C4F31F /* AddViewController.swift */,
-				39458F481F3162A900915FD5 /* TableViewCellController.swift */,
 				39458F511F3170B100915FD5 /* PostViewController.swift */,
+				39152AE61F37FF02001ADB1C /* SQLiteConnect.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -102,7 +103,6 @@
 				399CCC1D1F06B43D00AF605D /* Assets.xcassets */,
 				399CCC1F1F06B43D00AF605D /* LaunchScreen.storyboard */,
 				399CCC221F06B43D00AF605D /* Info.plist */,
-				3921507D1F30B74800C4F31F /* SQLiteConnect.swift */,
 			);
 			path = MyDiary;
 			sourceTree = "<group>";
@@ -184,10 +184,10 @@
 			files = (
 				39458F521F3170B100915FD5 /* PostViewController.swift in Sources */,
 				399CCC191F06B43D00AF605D /* ViewController.swift in Sources */,
+				39152AE71F37FF02001ADB1C /* SQLiteConnect.swift in Sources */,
 				39CAFA6F1F0C7B5C0035B241 /* CollectionVController.swift in Sources */,
 				39458F4E1F31674800915FD5 /* SettingsViewController.swift in Sources */,
 				3921507C1F30AAE200C4F31F /* AddViewController.swift in Sources */,
-				3921507E1F30B74800C4F31F /* SQLiteConnect.swift in Sources */,
 				399CCC171F06B43D00AF605D /* AppDelegate.swift in Sources */,
 				39458F491F3162A900915FD5 /* TableViewCellController.swift in Sources */,
 			);

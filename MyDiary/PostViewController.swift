@@ -4,11 +4,11 @@ class PostViewController: UIViewController {
     
     weak var tableViewController: ViewController!    //記錄上一頁的執行實體
     var selectedRow  = 0  //記錄上一頁選定的資料索引值
+    var db:OpaquePointer? = nil    //資料庫連線（從AppDelegate取得）
     
+    @IBOutlet weak var txtDate: UITextField!    
     @IBOutlet weak var imgPicture: UIImageView!
-    @IBOutlet weak var txtView: UITextView!
-    @IBOutlet weak var txtDate: UITextField!
-    @IBOutlet weak var lblDate: UILabel!
+    @IBOutlet weak var txtView: UITextView!   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,14 +17,13 @@ class PostViewController: UIViewController {
         //記錄選定列的字典
         let dicCurrentRow = tableViewController.myRecords[selectedRow]
         //顯示上一頁選定的資料
-//        lblNo.text = dicCurrentRow["no"] as? String
-//        txtName.text = dicCurrentRow["name"] as? String
-//        pkvGender.selectRow(dicCurrentRow["gender"] as! Int, inComponent: 0, animated: true)
-//        imgPicture.image = dicCurrentRow["picture"] as? UIImage
-//        txtAddress.text = dicCurrentRow["address"] as? String
-//        txtPhone.text = dicCurrentRow["phone"] as? String
-//        txtEmail.text = dicCurrentRow["email"] as? String
-
+        txtDate.text = dicCurrentRow["CreateDate"] as? String
+        if let aPic = dicCurrentRow["photo"]! {
+            imgPicture.image = UIImage(data: aPic as! Data)
+        } else {
+            imgPicture.image = nil
+        }
+        txtView.text = dicCurrentRow["TextView"] as? String
     }
 
     //MARK: -Buttons

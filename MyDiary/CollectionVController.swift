@@ -74,7 +74,8 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
     }
     //MARK: -Buttons
     @IBAction func btnBack(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        //self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
         print("collection被釋放")
     }
     @IBAction func btnCalender(_ sender: UIBarButtonItem) {

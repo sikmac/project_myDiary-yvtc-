@@ -5,6 +5,11 @@ class PostViewController: UIViewController {
     weak var tableViewController: ViewController!    //記錄上一頁的執行實體
     var selectedRow  = 0  //記錄上一頁選定的資料索引值
     
+    @IBOutlet weak var imgPicture: UIImageView!
+    @IBOutlet weak var txtView: UITextView!
+    @IBOutlet weak var txtDate: UITextField!
+    @IBOutlet weak var lblDate: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

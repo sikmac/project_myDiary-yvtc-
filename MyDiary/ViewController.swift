@@ -8,7 +8,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var dicRow = [String:Any?]()    //記錄單一資料行
     var currentDate :Date = Date()
-    var myRecords = [[String:Any]]()
+    var myRecords = [[String:Any?]]()
     var db:OpaquePointer? = nil
     
     // MARK: -tableView in viewController property
@@ -37,7 +37,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        lblCurrentYearMonth.font = UIFont(name: "Helvetica Light", size: 32.0)
 //        lblCurrentYearMonth.tag = 701
 //        self.view.addSubview(lblCurrentYearMonth)
-        
         
         //不使用"拉"的方法，得使用此
         tableView.delegate = self
@@ -234,7 +233,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func btnAdd(_ sender: UIButton) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let addViewController = mainStoryboard.instantiateViewController(withIdentifier: "AddView")
-        self.navigationController?.pushViewController(addViewController, animated: true)
+//        self.navigationController?.pushViewController(addViewController, animated: true)
+        show(addViewController, sender: nil)
     }
     
     

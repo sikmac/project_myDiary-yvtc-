@@ -39,7 +39,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.10000000000000001" contentMode="center" tableViewCell="fVG-2N-b0w" id="8eV-ze-ETu">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="199"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wwn-pe-IgZ">
@@ -129,7 +129,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="lblCurrentYearMonth" destination="ybZ-Mv-wrA" id="59p-jf-PaL"/>
-                        <outlet property="tableView" destination="8jy-G8-d7c" id="HHq-Xc-kwr"/>
+                        <outlet property="tableView" destination="8jy-G8-d7c" id="9bR-fs-HqE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

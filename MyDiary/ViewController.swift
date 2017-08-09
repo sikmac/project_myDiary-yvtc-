@@ -8,13 +8,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var dicRow = [String:Any?]()    //記錄單一資料行（離線資料集）
     var currentDate: Date = Date()
-    var myRecords = [String:[[String:Any?]]]()    //記錄查詢到的資料表
+    var myRecords :[String:[[String:Any?]]]! = [:]    //記錄查詢到的資料表
     var db:OpaquePointer? = nil    //資料庫連線（從AppDelegate取得）
-    var days = [String]()
+    var days :[String]! = []
     
     // MARK: -tableView in viewController property
     @IBOutlet weak var lblCurrentYearMonth: UILabel!
-    @IBOutlet weak var tableView: UITableView!    //先將tableView建立屬性
+        //先將tableView建立屬性
+    @IBOutlet var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,16 +42,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     //由導覽線換頁時
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "segue1" {
             let detailVC = segue.destination as! PostViewController
             detailVC.tableViewController = self    //傳遞第一頁的執行實體給第二頁（引用型別傳遞）
             if let rowIndex = self.tableView.indexPathForSelectedRow?.row {
                 detailVC.selectedRow = rowIndex    //傳遞目前選定列的索引給下一頁（值型別傳遞）
             }
-//        } else if segue.identifier == "segue2" {
-//            let detailVC = segue.destination as! AddViewController
-//            detailVC.tableViewController = self
-//        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -69,17 +65,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         return records.count
     }
-        //此為顯示單一diaryArray的數量
-//        return diaryArray.count
-        //多筆資料要顯示用if...let
-//        if section == 0 {
-//            return 1
-////            return diaryArray.count
-//        } else {
-//            return 2
-////            return diarySecondArray.count
-//        }
-//    }
     //每一列TableViewCell要顯示的資料
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCellController    //先產出cell
@@ -90,23 +75,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         // 顯示的內容
-//        cell!.detailTextLabel?.text = String(format: "%g",Float(records[indexPath.row]["amount"]!)!)
-//        cell!.textLabel?.text = records[indexPath.row]["title"]
         cell.lblDate.text = records[indexPath.row]["CreateDate"] as? String
         cell.lblWeek.text = records[indexPath.row]["CreateWeek"] as? String
         cell.txtView.text = records[indexPath.row]["TextView"] as? String
         cell.imgPicture.image = UIImage(data: ((records[indexPath.row]["Photo"]) as? Data)!)
-//        print(cell.contentView.subviews)
-//        let cellImageView = cell.contentView.subviews[0] as! UIImageView    //設定cell的縮圖與文字
-//        let cellText = cell.contentView.subviews[1] as! UILabel
-//        
-//        cellImageView.image = UIImage(named: "2105175_1")
-//        cellText.text = diaryArray[indexPath.row]
-//        if indexPath.section == 0 {
-//            cellText.text = diaryArray[indexPath.row]
-//        } else {
-//            cellText.text = diarySecondArray[indexPath.row]
-//        }
+
         return cell
     }
     //為多個section增加title
@@ -119,55 +92,64 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     //得知選擇了哪個row, section
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-                //選擇(點擊)後會變灰色，得取消選擇才復原
+        //選擇(點擊)後會變灰色，得取消選擇才復原
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            diaryArray.remove(at: indexPath.row)
-            tableView.reloadData()
-//            tableView.deleteRows(at: [indexPath], with: .fade)
-//        }
-    }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//            tableView.reloadData()
+//    }
     // MARK: Functional Methods
-    func getDataFromDB() {
+    func getDataFromDB()
+    {
         //清除所有的陣列元素
         myRecords.removeAll()        //arrTable = [[String:Any?]]()
         let sql = "select Id,YearMonth,CreateDate,CreateWeek,CreateTime,Photo,TextView from records order by YearMonth desc, CreateTime desc"    //準備查詢指令
         var statement:OpaquePointer? = nil    //宣告查詢結果的變數（連線資料集）
         sqlite3_prepare(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)    //執行查詢指令（-1代表不限定sql指令的長度，最後一個參數為預留參數，目前沒有作用）
         //往下讀一筆，如果讀到資料時
-        while sqlite3_step(statement) == SQLITE_ROW {
+        while sqlite3_step(statement) == SQLITE_ROW
+        {
             let sId = Int(sqlite3_column_int(statement, 0))
+            print("\(sId)")
             let sYearMonth = String(cString: sqlite3_column_text(statement, 1))
+            print("\(sYearMonth)")
             let sCreateDate = String(cString: sqlite3_column_text(statement, 2))
+            print("\(sCreateDate)")
             let sCreateWeek = String(cString: sqlite3_column_text(statement, 3))
+            print("\(sCreateWeek)")
             //取得第四個欄位（照片）
             var imgData:Data?    //用於記載檔案的每一個位元資料
-            if let totalBytes = sqlite3_column_blob(statement, 5) {    //讀取檔案每一個位元的資料
+            if let totalBytes = sqlite3_column_blob(statement, 5)
+            {    //讀取檔案每一個位元的資料
                 let length = sqlite3_column_bytes(statement, 5)     //讀取檔案長度
                 imgData = Data(bytes: totalBytes, count: Int(length))    //將數位圖檔資訊，初始化成為Data物件
             }
             let sTextView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
-            
-            if sYearMonth != "" {
-                if !days.contains(sYearMonth) {
+            print("\(sTextView)")
+//            if sYearMonth != "" {
+//                if !days.contains(sYearMonth) {
                     days.append(sYearMonth)
+            print("days array:\(days)")
                     myRecords[sYearMonth] = []
-                }
-                
-                myRecords[sYearMonth]?.append([
-                    "Id":"\(sId)",
-                    "CreateDate":"\(sCreateDate)",
-                    "CreateWeek":"\(sCreateWeek)",
-                    "Photo":imgData,
-                    "TextView":"\(sTextView)"
-                    ])
-            }
+//                }
+            
+//                myRecords[sYearMonth]?.append([
+            dicRow = [
+                "Id":"\(sId)",
+                "CreateDate":"\(sCreateDate)",
+                "CreateWeek":"\(sCreateWeek)",
+                "Photo":imgData,
+                "TextView":"\(sTextView)"
+            ]
+            print("dic array:\(dicRow)")
+            myRecords[sYearMonth]?.append(dicRow)
+            print("myRecords：\(myRecords)")
+
+//            }
         }
         sqlite3_finalize(statement)    //關閉連線資料集
-//        tableView.reloadData()
-        print("離線資料集陣列：\(myRecords)")
+//        print("myRecords：\(myRecords)")
+        tableView.reloadData()
     }
     //MARK: -tableView refresh
     //refreshList方法裡要把更新後的資料存進tableDate裡
@@ -196,10 +178,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }
     @IBAction func btnAdd(_ sender: UIButton) {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let addViewController = mainStoryboard.instantiateViewController(withIdentifier: "AddView") as! AddViewController
+//        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let addViewController = storyboard?.instantiateViewController(withIdentifier: "AddView") as! AddViewController
         addViewController.tableViewController = self
         self.navigationController?.pushViewController(addViewController, animated: true)
+//        show(addViewController, sender: nil)
         
     }
     

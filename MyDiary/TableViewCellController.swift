@@ -6,6 +6,7 @@ class TableViewCellController: UITableViewCell {
     @IBOutlet weak var txtView: UILabel!
     @IBOutlet weak var lblDate: UILabel!
     @IBOutlet weak var lblWeek: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         

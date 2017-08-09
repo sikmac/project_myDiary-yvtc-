@@ -6,9 +6,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let myFormatter = DateFormatter()
     let myRefreshControl = UIRefreshControl()    //建立UIRefreshControl，存在常數myRefreshControl中
     
-    var dicRow = [String:Any?]()    //記錄單一資料行
+    var dicRow = [String:Any?]()    //記錄單一資料行（離線資料集）
     var currentDate: Date = Date()
-    var myRecords = [String:[[String:Any?]]]()    //記錄查詢到的資料表（離線資料集）
+    var myRecords = [String:[[String:Any?]]]()    //記錄查詢到的資料表
     var db:OpaquePointer? = nil    //資料庫連線（從AppDelegate取得）
     var days = [String]()
     
@@ -21,6 +21,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {    //從AppDelegate取得資料庫連線
             db = appDelegate.getDB()
+            print("連線成功１")
         }
         getDataFromDB()    //準備離線資料集(呼叫讀取資料庫資料的函式)
         
@@ -132,8 +133,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func getDataFromDB() {
         //清除所有的陣列元素
         myRecords.removeAll()        //arrTable = [[String:Any?]]()
-        let sql = "select Id,YearMonth,CreateDate,CreateWeek,Photo,TextView from records order by YearMonth desc, CreateTime desc"    //準備查詢指令
-//        let cSql = sql.cString(using: .utf8)    //將查詢指令轉成c語言的字串
+        let sql = "select Id,YearMonth,CreateDate,CreateWeek,CreateTime,Photo,TextView from records order by YearMonth desc, CreateTime desc"    //準備查詢指令
         var statement:OpaquePointer? = nil    //宣告查詢結果的變數（連線資料集）
         sqlite3_prepare(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)    //執行查詢指令（-1代表不限定sql指令的長度，最後一個參數為預留參數，目前沒有作用）
         //往下讀一筆，如果讀到資料時

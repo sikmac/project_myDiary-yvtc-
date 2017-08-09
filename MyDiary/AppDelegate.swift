@@ -5,7 +5,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    var db:OpaquePointer? = nil    //宣告資料庫連線變數
+    private var db:OpaquePointer? = nil    //宣告資料庫連線變數
     func getDB() -> OpaquePointer? {
         return db
     }
@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        //檢查目的地的資料庫是否已經存在
                 if !FileManager.default.fileExists(atPath: destinationDB) {    //如果不存在
                     
-                    if sqlite3_open(destinationDB, &db) == SQLITE_OK {
+                    if sqlite3_open(destinationDB, &db) == SQLITE_OK
+                    {
                         print("Success!")
                         
                         let sql = "create table if not exists records (Id INTEGER primary key autoincrement,YearMonth TEXT,CreateDate TEXT,CreateWeek TEXT,CreateTime DATETIME,Photo BLOB,TextView TEXT)"
@@ -110,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-//        sqlite3_close(db)    //關閉資料庫
+        sqlite3_close(db)    //關閉資料庫
     }
 
 }

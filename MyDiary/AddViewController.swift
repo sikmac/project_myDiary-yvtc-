@@ -8,7 +8,8 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
     weak var tableViewController:ViewController!    //記錄上一頁的執行實體
     var currentTextObjectYPosition:CGFloat = 0    //記錄目前輸入元件的Y軸底緣位置
     var myDatePicker :UIDatePicker!
-    var myRecords = [[String:Any?]]()    //記錄查詢到的資料表（離線資料集）
+    var myRecords = [String:[[String:Any?]]]()    //記錄查詢到的資料表（離線資料集）
+    var newDays = [String]()
     
     @IBOutlet weak var imgPicture: UIImageView!
     @IBOutlet weak var txtView: UITextView!
@@ -19,7 +20,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
         //從AppDelegate取得資料庫連線
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             db = appDelegate.getDB()
-            print("連線成功")
+            print("連線成功２")
         }
         
         txtDate.delegate = self
@@ -74,28 +75,45 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
             present(alert, animated: true, completion: nil)
             return  //直接離開函式
         }
-        
+        print("aaaaaaaaaa")
         let createTime = myFormatter.string(from: Date())
         let yearMonth = (createTime as NSString).substring(to: 7)
         let currentDate = (createTime as NSString).substring(to: 10)
         let createDate = (currentDate as NSString).substring(from: 8)
         let createWeek = (createTime as NSString).substring(from: 17)
-        
+        print("bbbbbbbbbbb")
         //檢查資料庫連線
         if db != nil {
+            print("cccccccccc")
             var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
             let imageData = UIImageJPEGRepresentation(imgPicture.image!, 0.8)! as NSData    //準備要存入的圖片
-            let sql = String(format: "insert into records (CreateDate,YearMonth,photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, createTime, createWeek)    //準備SQL的插入指令
+            let sql = String(format: "insert into records (CreateDate,YearMonth,Photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, createTime, createWeek)    //準備SQL的插入指令
+            print("新增指令1.：\(sql)")
             sqlite3_prepare_v2(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)     //準備執行SQL指令
             //將照片存入資料庫欄位（第二個參數1，指的是SQL指令?所在的位置，此位置從1起算）
             sqlite3_bind_blob(statement, 1, imageData.bytes, Int32(imageData.length), nil)
             //執行SQL指令
-            print("\(sql)")
+            print("新增指令2.：\(sql)")
             if sqlite3_step(statement) == SQLITE_DONE {
+                print("資料新增成功！")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增成功！", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "確定", style: .default, handler: nil))
                 present(alert, animated: true, completion: nil)
                 
+                if yearMonth != "" {
+                    if !newDays.contains(yearMonth) {
+                        newDays.append(yearMonth)
+                        myRecords[yearMonth] = []
+                    }
+                    
+                    myRecords[yearMonth]?.append([
+                        "CreateWeek":"\(createWeek)",
+                        "CreateDate":"\(createDate)",
+                        "CreateTime":"\(createTime)",
+                        "Photo":imageData,
+                        "TextView":txtView.text!
+                        ])
+                }
                 //新加一筆上一頁的離線資料
 //                let newDicRow:[String: Any?] = [
 //                    "CreateDate":"'\(createDate)'",

@@ -24,7 +24,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         txtDate.delegate = self
         self.title = "新增"
-        myFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        myFormatter.dateFormat = "yyyy-MM-dd HH:mm EEE"
         
         // UIDatePicker
         myDatePicker = UIDatePicker()
@@ -77,41 +77,35 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
         
         let createTime = myFormatter.string(from: Date())
         let yearMonth = (createTime as NSString).substring(to: 7)
-        let createDate = (createTime as NSString).substring(to: 10)
+        let currentDate = (createTime as NSString).substring(to: 10)
+        let createDate = (currentDate as NSString).substring(from: 8)
+        let createWeek = (createTime as NSString).substring(from: 17)
         
         //檢查資料庫連線
         if db != nil {
             var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
             let imageData = UIImageJPEGRepresentation(imgPicture.image!, 0.8)! as NSData    //準備要存入的圖片
-            let sql = String(format: "insert into records (CreateDate,YearMonth,photo,TextView,CreateTime) values ('%@','%@',?,'%@','%@')", createDate, yearMonth, txtView.text!, createTime)    //準備SQL的插入指令
-//            let cSql = sql.cString(using: .utf8)    //把SQL指令轉成C語言字串
-//            var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
+            let sql = String(format: "insert into records (CreateDate,YearMonth,photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, createTime, createWeek)    //準備SQL的插入指令
             sqlite3_prepare_v2(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)     //準備執行SQL指令
             //將照片存入資料庫欄位（第二個參數1，指的是SQL指令?所在的位置，此位置從1起算）
             sqlite3_bind_blob(statement, 1, imageData.bytes, Int32(imageData.length), nil)
             //執行SQL指令
+            print("\(sql)")
             if sqlite3_step(statement) == SQLITE_DONE {
-//                print("資料新增成功！")
-                print("新增指令：\(sql)")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增成功！", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "確定", style: .default, handler: nil))
                 present(alert, animated: true, completion: nil)
                 
                 //新加一筆上一頁的離線資料
-                let newDicRow:[String: Any?] = [
-                    "CreateDate":"'\(createDate)'",    //"CreateDate":txtDate.text
-                    "YearMonth":"'\(yearMonth)'",
-                    "photo":UIImageJPEGRepresentation(imgPicture.image!, 0.7),
-                    "TextView":txtView.text,
-                    "CreateTime":"'\(createTime)'"
-//                    "address":txtAdress.text,
-//                    "phone":txtPhone.text,
-//                    "email":txtEmail.text,
-//                    "gender":pkvGender.selectedRow(inComponent: 0),
-//                    "class":arrClass[pkvClass.selectedRow(inComponent: 0)],
-//                    "name":txtDate.text
-                ]
-                tableViewController.myRecords.append(newDicRow)
+//                let newDicRow:[String: Any?] = [
+//                    "CreateDate":"'\(createDate)'",
+//                    "YearMonth":"'\(yearMonth)'",
+//                    "photo":UIImageJPEGRepresentation(imgPicture.image!, 0.7),
+//                    "TextView":txtView.text,
+//                    "CreateTime":"'\(createTime)'",
+//                    "CreateWeek":"'\(createWeek)'"
+//                ]
+//                tableViewController.myRecords[].append(newDicRow)
             } else {
                 print("資料新增失敗！")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增失敗！", preferredStyle: .alert)

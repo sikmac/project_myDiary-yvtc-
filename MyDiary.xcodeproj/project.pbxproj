@@ -18,7 +18,6 @@
 		399CCC1C1F06B43D00AF605D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 399CCC1A1F06B43D00AF605D /* Main.storyboard */; };
 		399CCC1E1F06B43D00AF605D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 399CCC1D1F06B43D00AF605D /* Assets.xcassets */; };
 		399CCC211F06B43D00AF605D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 399CCC1F1F06B43D00AF605D /* LaunchScreen.storyboard */; };
-		39B0A5071F07987900EC8943 /* 2105175_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 39B0A5061F07987900EC8943 /* 2105175_1.png */; };
 		39CAFA6F1F0C7B5C0035B241 /* CollectionVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CAFA6E1F0C7B5C0035B241 /* CollectionVController.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +36,6 @@
 		399CCC1D1F06B43D00AF605D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		399CCC201F06B43D00AF605D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		399CCC221F06B43D00AF605D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		39B0A5061F07987900EC8943 /* 2105175_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2105175_1.png; sourceTree = "<group>"; };
 		39CAFA6E1F0C7B5C0035B241 /* CollectionVController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionVController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,7 +95,6 @@
 			isa = PBXGroup;
 			children = (
 				39458F4A1F31661B00915FD5 /* Controllers */,
-				39B0A5061F07987900EC8943 /* 2105175_1.png */,
 				399CCC161F06B43D00AF605D /* AppDelegate.swift */,
 				399CCC1A1F06B43D00AF605D /* Main.storyboard */,
 				399CCC1D1F06B43D00AF605D /* Assets.xcassets */,
@@ -169,7 +166,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				399CCC211F06B43D00AF605D /* LaunchScreen.storyboard in Resources */,
-				39B0A5071F07987900EC8943 /* 2105175_1.png in Resources */,
 				399CCC1E1F06B43D00AF605D /* Assets.xcassets in Resources */,
 				399CCC1C1F06B43D00AF605D /* Main.storyboard in Resources */,
 			);

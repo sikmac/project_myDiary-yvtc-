@@ -13,17 +13,17 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("上一頁選定：\(tableViewController.myRecords[selectedRow])")
+//        print("上一頁選定：\(tableViewController.myRecords[selectedRow])")
         //記錄選定列的字典
-        let dicCurrentRow = tableViewController.myRecords[selectedRow]
+//        let dicCurrentRow = tableViewController.myRecords[selectedRow]
         //顯示上一頁選定的資料
-        txtDate.text = dicCurrentRow["CreateDate"] as? String
-        if let aPic = dicCurrentRow["photo"]! {
-            imgPicture.image = UIImage(data: aPic as! Data)
-        } else {
-            imgPicture.image = nil
-        }
-        txtView.text = dicCurrentRow["TextView"] as? String
+//        txtDate.text = dicCurrentRow["CreateDate"] as? String
+//        if let aPic = dicCurrentRow["photo"]! {
+//            imgPicture.image = UIImage(data: aPic as! Data)
+//        } else {
+//            imgPicture.image = nil
+//        }
+//        txtView.text = dicCurrentRow["TextView"] as? String
     }
 
     //MARK: -Buttons

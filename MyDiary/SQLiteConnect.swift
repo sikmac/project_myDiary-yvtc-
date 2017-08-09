@@ -33,7 +33,6 @@ class SQLiteConnect {
     func createTable(_ tableName :String, columnsInfo :[String]) -> Bool {
         let sql = "create table if not exists \(tableName) "
             + "(\(columnsInfo.joined(separator: ",")))"
-        
         if sqlite3_exec(self.db, sql.cString(using: String.Encoding.utf8), nil, nil, nil) == SQLITE_OK{
             return true
         }

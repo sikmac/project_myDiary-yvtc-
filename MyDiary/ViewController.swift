@@ -2,7 +2,6 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-//    let fullsize = UIScreen.main.bounds.size
     let myFormatter = DateFormatter()
     let myRefreshControl = UIRefreshControl()    //建立UIRefreshControl，存在常數myRefreshControl中
     
@@ -21,9 +20,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {    //從AppDelegate取得資料庫連線
             db = appDelegate.getDB()
-            print("連線成功１")
+//            print("連線成功１")
         }
-        getDataFromDB()    //準備離線資料集(呼叫讀取資料庫資料的函式)
         
         // 目前年月
         lblCurrentYearMonth.textColor = UIColor.white
@@ -35,22 +33,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
+        getDataFromDB()    //準備離線資料集(呼叫讀取資料庫資料的函式)
         tableView.refreshControl = myRefreshControl    //產生下拉更新元件
         self.myRefreshControl.addTarget(self, action: #selector(self.refreshList), for: .valueChanged)    //對應下拉更新的事件
         tableView.refreshControl?.attributedTitle = NSAttributedString(string: "更新中...")    //指定下拉更新的附帶文字
     }
     //由導覽線換頁時
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "segue1" {
             let detailVC = segue.destination as! PostViewController
             detailVC.tableViewController = self    //傳遞第一頁的執行實體給第二頁（引用型別傳遞）
             if let rowIndex = self.tableView.indexPathForSelectedRow?.row {
                 detailVC.selectedRow = rowIndex    //傳遞目前選定列的索引給下一頁（值型別傳遞）
             }
-//        } else if segue.identifier == "segue2" {
-//            let detailVC = segue.destination as! AddViewController
-//            detailVC.tableViewController = self
-//        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -82,7 +76,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //    }
     //每一列TableViewCell要顯示的資料
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCellController    //先產出cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCellController    //先產出cell
         
         let date = days[indexPath.section]
         guard let records = myRecords[date] else {
@@ -90,23 +84,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         // 顯示的內容
-//        cell!.detailTextLabel?.text = String(format: "%g",Float(records[indexPath.row]["amount"]!)!)
-//        cell!.textLabel?.text = records[indexPath.row]["title"]
         cell.lblDate.text = records[indexPath.row]["CreateDate"] as? String
         cell.lblWeek.text = records[indexPath.row]["CreateWeek"] as? String
         cell.txtView.text = records[indexPath.row]["TextView"] as? String
         cell.imgPicture.image = UIImage(data: ((records[indexPath.row]["Photo"]) as? Data)!)
-//        print(cell.contentView.subviews)
-//        let cellImageView = cell.contentView.subviews[0] as! UIImageView    //設定cell的縮圖與文字
-//        let cellText = cell.contentView.subviews[1] as! UILabel
-//        
-//        cellImageView.image = UIImage(named: "2105175_1")
-//        cellText.text = diaryArray[indexPath.row]
-//        if indexPath.section == 0 {
-//            cellText.text = diaryArray[indexPath.row]
-//        } else {
-//            cellText.text = diarySecondArray[indexPath.row]
-//        }
         return cell
     }
     //為多個section增加title
@@ -139,9 +120,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //往下讀一筆，如果讀到資料時
         while sqlite3_step(statement) == SQLITE_ROW {
             let sId = Int(sqlite3_column_int(statement, 0))
+            print("sId:\(sId)")
+
             let sYearMonth = String(cString: sqlite3_column_text(statement, 1))
+            print("sYearMonth:\(sYearMonth)")
+
             let sCreateDate = String(cString: sqlite3_column_text(statement, 2))
+            print("sCreateDate:\(sCreateDate)")
+
             let sCreateWeek = String(cString: sqlite3_column_text(statement, 3))
+            print("sCreateWeek:\(sCreateWeek)")
+
             //取得第四個欄位（照片）
             var imgData:Data?    //用於記載檔案的每一個位元資料
             if let totalBytes = sqlite3_column_blob(statement, 5) {    //讀取檔案每一個位元的資料
@@ -149,20 +138,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 imgData = Data(bytes: totalBytes, count: Int(length))    //將數位圖檔資訊，初始化成為Data物件
             }
             let sTextView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
+            print("sTextView:\(sTextView)")
+
             
             if sYearMonth != "" {
+                print("1days:\(days)")
                 if !days.contains(sYearMonth) {
+                    print("2days:\(days)")
                     days.append(sYearMonth)
+                    print("3days:\(days)")
                     myRecords[sYearMonth] = []
                 }
                 
-                myRecords[sYearMonth]?.append([
+//                myRecords[sYearMonth]?.append([
+                dicRow = [
                     "Id":"\(sId)",
                     "CreateDate":"\(sCreateDate)",
                     "CreateWeek":"\(sCreateWeek)",
                     "Photo":imgData,
                     "TextView":"\(sTextView)"
-                    ])
+                    ]
+                print("dicRow:\(dicRow)")
+                myRecords[sYearMonth]?.append(dicRow)
             }
         }
         sqlite3_finalize(statement)    //關閉連線資料集

@@ -58,7 +58,9 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
 
     // 選取日期時 按下完成
     func doneTouched(_ sender:UIBarButtonItem) {
-        txtDate.text = myFormatter.string(from: myDatePicker.date)
+        let date = myFormatter.string(from: myDatePicker.date)
+        print("date:\(date)")
+        txtDate.text = date
         closeKeyBoard()
     }
     // 選取日期時 按下取消
@@ -75,30 +77,32 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
             present(alert, animated: true, completion: nil)
             return  //直接離開函式
         }
-        print("aaaaaaaaaa")
-        let createTime = myFormatter.string(from: Date())
-        let yearMonth = (createTime as NSString).substring(to: 7)
-        let currentDate = (createTime as NSString).substring(to: 10)
-        let createDate = (currentDate as NSString).substring(from: 8)
-        let createWeek = (createTime as NSString).substring(from: 17)
-        print("bbbbbbbbbbb")
         //檢查資料庫連線
         if db != nil {
-            print("cccccccccc")
             var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
             let imageData = UIImageJPEGRepresentation(imgPicture.image!, 0.8)! as NSData    //準備要存入的圖片
-            let sql = String(format: "insert into records (CreateDate,YearMonth,Photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, createTime, createWeek)    //準備SQL的插入指令
-            print("新增指令1.：\(sql)")
+            let createTime = (txtDate.text!)
+            print("createTime:\(createTime)")
+            let yearMonth = (txtDate.text! as NSString).substring(to: 7)
+            let currentDate = (txtDate.text! as NSString).substring(to: 10)
+            let createDate = (currentDate as NSString).substring(from: 8)
+            let createWeek = (txtDate.text! as NSString).substring(from: 17)
+            let sql = String(format: "insert into records (CreateDate,YearMonth,Photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, txtDate.text!, createWeek)    //準備SQL的插入指令
+//            print("新增指令1.：\(sql)")
             sqlite3_prepare_v2(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)     //準備執行SQL指令
             //將照片存入資料庫欄位（第二個參數1，指的是SQL指令?所在的位置，此位置從1起算）
             sqlite3_bind_blob(statement, 1, imageData.bytes, Int32(imageData.length), nil)
             //執行SQL指令
-            print("新增指令2.：\(sql)")
+//            print("新增指令2.：\(sql)")
             if sqlite3_step(statement) == SQLITE_DONE {
-                print("資料新增成功！")
+//                print("資料新增成功！")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增成功！", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "確定", style: .default, handler: nil))
-                present(alert, animated: true, completion: nil)
+                alert.addAction(UIAlertAction(title: "確定", style: .default, handler: {
+                    (result) -> Void
+                    in
+                    _ = self.navigationController?.popViewController(animated: false)
+                }))
+                present(alert, animated: false, completion: nil)
                 
                 if yearMonth != "" {
                     if !newDays.contains(yearMonth) {
@@ -106,7 +110,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
                         myRecords[yearMonth] = []
                     }
                     
-                    myRecords[yearMonth]?.append([
+                    tableViewController.myRecords[yearMonth]?.append([
                         "CreateWeek":"\(createWeek)",
                         "CreateDate":"\(createDate)",
                         "CreateTime":"\(createTime)",

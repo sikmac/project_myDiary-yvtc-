@@ -50,7 +50,54 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.getDataFromDB()
         tableView.reloadData()    //畫面重現時，請TableView立即重整資料
+    }
+    func getDataFromDB() {
+        //清除所有的陣列元素
+        days.removeAll()
+        myRecords.removeAll()        //arrTable = [[String:Any?]]()
+        let sql = "select Id,YearMonth,CreateDate,CreateWeek,CreateTime,Photo,TextView from records order by YearMonth desc, CreateTime desc"    //準備查詢指令
+        var statement:OpaquePointer? = nil    //宣告查詢結果的變數（連線資料集）
+        sqlite3_prepare(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)    //執行查詢指令（-1代表不限定sql指令的長度，最後一個參數為預留參數，目前沒有作用）
+        //往下讀一筆，如果讀到資料時
+        while sqlite3_step(statement) == SQLITE_ROW {
+            let sId = Int(sqlite3_column_int(statement, 0))
+            let sYearMonth = String(cString: sqlite3_column_text(statement, 1))
+            let sCreateDate = String(cString: sqlite3_column_text(statement, 2))
+            let sCreateWeek = String(cString: sqlite3_column_text(statement, 3))
+            //取得第四個欄位（照片）
+            var imgData:Data?    //用於記載檔案的每一個位元資料
+            if let totalBytes = sqlite3_column_blob(statement, 5) {    //讀取檔案每一個位元的資料
+                let length = sqlite3_column_bytes(statement, 5)     //讀取檔案長度
+                imgData = Data(bytes: totalBytes, count: Int(length))    //將數位圖檔資訊，初始化成為Data物件
+            }
+            let sTextView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
+            if sYearMonth != "" {
+                //                print("1days:\(days)")
+                if !days.contains(sYearMonth) {
+                    //                    print("2days:\(days)")
+                    days.append(sYearMonth)
+                    print("3days:\(days)")
+                    myRecords[sYearMonth] = []
+                }
+                //                myRecords[sYearMonth]?.append([
+                dicRow = [
+                    "Id":"\(sId)",
+                    "CreateDate":"\(sCreateDate)",
+                    "CreateWeek":"\(sCreateWeek)",
+                    "Photo":imgData,
+                    "TextView":"\(sTextView)"
+                ]
+                print("dic array:\(dicRow)")
+                myRecords[sYearMonth]?.append(dicRow)
+                print("myRecords：\(myRecords)")
+                
+    }
+        }
+        sqlite3_finalize(statement)    //關閉連線資料集
+        //        print("myRecords：\(myRecords)")
+        tableView.reloadData()
     }
     // MARK: Table view data source
     //要顯示幾個Section(建立幾筆陣列資料這需更動)
@@ -88,7 +135,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     //設定section title(header)的高度
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 40
     }
     //得知選擇了哪個row, section
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -99,50 +146,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //            tableView.reloadData()
 //    }
     // MARK: Functional Methods
-    func getDataFromDB() {
-        //清除所有的陣列元素
-        myRecords.removeAll()        //arrTable = [[String:Any?]]()
-        let sql = "select Id,YearMonth,CreateDate,CreateWeek,CreateTime,Photo,TextView from records order by YearMonth desc, CreateTime desc"    //準備查詢指令
-        var statement:OpaquePointer? = nil    //宣告查詢結果的變數（連線資料集）
-        sqlite3_prepare(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)    //執行查詢指令（-1代表不限定sql指令的長度，最後一個參數為預留參數，目前沒有作用）
-        //往下讀一筆，如果讀到資料時
-        while sqlite3_step(statement) == SQLITE_ROW {
-            let sId = Int(sqlite3_column_int(statement, 0))
-            let sYearMonth = String(cString: sqlite3_column_text(statement, 1))
-            let sCreateDate = String(cString: sqlite3_column_text(statement, 2))
-            let sCreateWeek = String(cString: sqlite3_column_text(statement, 3))
-            //取得第四個欄位（照片）
-            var imgData:Data?    //用於記載檔案的每一個位元資料
-            if let totalBytes = sqlite3_column_blob(statement, 5) {    //讀取檔案每一個位元的資料
-                let length = sqlite3_column_bytes(statement, 5)     //讀取檔案長度
-                imgData = Data(bytes: totalBytes, count: Int(length))    //將數位圖檔資訊，初始化成為Data物件
-            }
-            let sTextView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
-//            if sYearMonth != "" {
-//                if !days.contains(sYearMonth) {
-                    days.append(sYearMonth)
-            print("days array:\(days)")
-                    myRecords[sYearMonth] = []
-//                }
-            
-//                myRecords[sYearMonth]?.append([
-            dicRow = [
-                "Id":"\(sId)",
-                "CreateDate":"\(sCreateDate)",
-                "CreateWeek":"\(sCreateWeek)",
-                "Photo":imgData,
-                "TextView":"\(sTextView)"
-            ]
-            print("dic array:\(dicRow)")
-            myRecords[sYearMonth]?.append(dicRow)
-            print("myRecords：\(myRecords)")
-
-//            }
-        }
-        sqlite3_finalize(statement)    //關閉連線資料集
-//        print("myRecords：\(myRecords)")
-        tableView.reloadData()
-    }
+    
     //MARK: -tableView refresh
     //refreshList方法裡要把更新後的資料存進tableDate裡
     //讓tableView執行reloadData方法更新資料

@@ -58,7 +58,9 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
 
     // 選取日期時 按下完成
     func doneTouched(_ sender:UIBarButtonItem) {
-        txtDate.text = myFormatter.string(from: myDatePicker.date)
+        let date = myFormatter.string(from: myDatePicker.date)
+        print("date:\(date)")
+        txtDate.text = date
         closeKeyBoard()
     }
     // 選取日期時 按下取消
@@ -77,7 +79,8 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
         }
 //        print("aaaaaaaaaa")
         
-        let createTime = myFormatter.string(from: Date())
+//        let createTime = myFormatter.string(from: Date())
+        let createTime = (txtDate.text)!
         let yearMonth = (createTime as NSString).substring(to: 7)
         let currentDate = (createTime as NSString).substring(to: 10)
         let createDate = (currentDate as NSString).substring(from: 8)
@@ -88,7 +91,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
 //            print("cccccccccc")
             var statement:OpaquePointer? = nil    //宣告儲存執行結果的變數
             let imageData = UIImageJPEGRepresentation(imgPicture.image!, 0.8)! as NSData    //準備要存入的圖片
-            let sql = String(format: "insert into records (CreateDate,YearMonth,Photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, createTime, createWeek)    //準備SQL的插入指令
+            let sql = String(format: "insert into records (CreateDate,YearMonth,Photo,TextView,CreateTime,CreateWeek) values ('%@','%@',?,'%@','%@','%@')", createDate, yearMonth, txtView.text!, txtDate.text!, createWeek)    //準備SQL的插入指令
 //            print("新增指令1.：\(sql)")
             sqlite3_prepare_v2(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)     //準備執行SQL指令
             //將照片存入資料庫欄位（第二個參數1，指的是SQL指令?所在的位置，此位置從1起算）
@@ -98,10 +101,14 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
             if sqlite3_step(statement) == SQLITE_DONE {
 //                print("資料新增成功！")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增成功！", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "確定", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "確定", style: .default, handler: {
+                    (result) -> Void
+                    in
+                    _ = self.navigationController?.popViewController(animated: false)
+                }))
                 present(alert, animated: true, completion: nil)
                 
-                if yearMonth != "" {
+//                if yearMonth != "" {
                     if !newDays.contains(yearMonth) {
                         newDays.append(yearMonth)
                         tableViewController.myRecords[yearMonth] = []
@@ -115,10 +122,10 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
                         "Photo":imageData,
                         "TextView":txtView.text!
                         ])
-                }
+//                }
                 print("新增資料：\(tableViewController.myRecords)")
             } else {
-                print("資料新增失敗！")
+//                print("資料新增失敗！")
                 let alert = UIAlertController(title: "資料庫訊息", message: "資料新增失敗！", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "確定", style: .destructive, handler: nil))
                 present(alert, animated: true, completion: nil)
@@ -136,7 +143,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
     }    
     //由鍵盤彈出通知呼叫的函式
     func keyboardWillShow(_ sender:Notification) {
-        print("鍵盤彈出")
+//        print("鍵盤彈出")
 //        print("userInfo=\(String(describing: sender.userInfo))")
         if let keyboardHeight = (sender.userInfo?["UIKeyboardFrameEndUserInfoKey"] as? NSValue)?.cgRectValue.size.height {
             print("鍵盤高度：\(keyboardHeight)")
@@ -154,7 +161,7 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
     }
     //由點按手勢呼叫
     func closeKeyBoard() {
-        print("感應到點按手勢")
+//        print("感應到點按手勢")
         //掃描self.view底下所有的可視元件，收起鍵盤
         for subView in self.view.subviews {
             if subView is UITextField || subView is UITextView {

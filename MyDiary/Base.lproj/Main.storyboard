@@ -31,15 +31,15 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="tableView1" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="200" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8jy-G8-d7c">
-                                <rect key="frame" x="0.0" y="114" width="414" height="564"/>
+                                <rect key="frame" x="0.0" y="64" width="414" height="614"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="200" id="fVG-2N-b0w" customClass="TableViewCellController" customModule="MyDiary" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.10000000000000001" contentMode="center" tableViewCell="fVG-2N-b0w" id="8eV-ze-ETu">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fVG-2N-b0w" id="8eV-ze-ETu">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="199.66666666666666"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wwn-pe-IgZ">
@@ -77,7 +77,7 @@
                                             <outlet property="lblDate" destination="zgt-ot-fgE" id="kFi-xp-Gie"/>
                                             <outlet property="lblWeek" destination="zYa-uU-jj5" id="pIK-7D-Iku"/>
                                             <outlet property="txtView" destination="PFy-a8-cpu" id="lOs-pe-aub"/>
-                                            <segue destination="wKT-6l-DQc" kind="show" identifier="segue1" id="M7A-gJ-wyf"/>
+                                            <segue destination="wKT-6l-DQc" kind="show" identifier="segue1" id="YWq-hX-Txd"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -90,24 +90,6 @@
                                     <action selector="btnAdd:" destination="BYZ-38-t0r" eventType="touchUpInside" id="H1M-tK-ljF"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1yk-00-yfH">
-                                <rect key="frame" x="20" y="66" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="上一月"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MaG-MV-KB8">
-                                <rect key="frame" x="356" y="66" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="下一月"/>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" tag="701" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ybZ-Mv-wrA">
-                                <rect key="frame" x="107" y="56" width="200" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="32"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -128,7 +110,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="lblCurrentYearMonth" destination="ybZ-Mv-wrA" id="59p-jf-PaL"/>
                         <outlet property="tableView" destination="8jy-G8-d7c" id="9bR-fs-HqE"/>
                     </connections>
                 </viewController>
@@ -168,6 +149,22 @@
                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="32"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fIJ-oz-2ee">
+                                <rect key="frame" x="184" y="292" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="相機"/>
+                                <connections>
+                                    <action selector="btnTakePicture:" destination="qEG-Kg-sYZ" eventType="touchUpInside" id="YLF-sS-yly"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="POE-HU-Ibu">
+                                <rect key="frame" x="238" y="292" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="相簿"/>
+                                <connections>
+                                    <action selector="btnPhotoAlbum:" destination="qEG-Kg-sYZ" eventType="touchUpInside" id="wCU-Yw-sV4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -197,7 +194,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bz6-rg-4n1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-975" y="-886"/>
+            <point key="canvasLocation" x="-342" y="-207"/>
         </scene>
         <!--CollectionV Controller-->
         <scene sceneID="Iea-3d-Pt6">
@@ -353,7 +350,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iO6-yF-4RS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2193" y="-207"/>
+            <point key="canvasLocation" x="1548" y="-886"/>
         </scene>
         <!--設定-->
         <scene sceneID="HrW-RD-g7y">
@@ -405,6 +402,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="M7A-gJ-wyf"/>
+        <segue reference="mRb-R7-7S8"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -8,12 +8,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var dicRow = [String:Any?]()    //記錄單一資料行（離線資料集）
     var currentDate: Date = Date()
-    var myRecords :[String:[[String:Any?]]]! = [:]    //記錄查詢到的資料表
+    var myRecords :[String:[[String:Any?]]] = [:]    //記錄查詢到的資料表
     var db:OpaquePointer? = nil    //資料庫連線（從AppDelegate取得）
     var days :[String]! = []
-    
+//    var selectedId = 0
     // MARK: -tableView in viewController property
-    @IBOutlet weak var lblCurrentYearMonth: UILabel!
+//    @IBOutlet weak var lblCurrentYearMonth: UILabel!
         //先將tableView建立屬性
     @IBOutlet var tableView: UITableView!
     
@@ -22,15 +22,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {    //從AppDelegate取得資料庫連線
             db = appDelegate.getDB()
-            print("連線成功１")
+//            print("連線成功１")
         }
         getDataFromDB()    //準備離線資料集(呼叫讀取資料庫資料的函式)
         
-        // 目前年月
-        lblCurrentYearMonth.textColor = UIColor.white
-        myFormatter.dateFormat = "yyyy 年 MM 月"
-        lblCurrentYearMonth.text = myFormatter.string(from: currentDate)
-        lblCurrentYearMonth.textAlignment = .center
+//        // 目前年月
+//        lblCurrentYearMonth.textColor = UIColor.white
+//        myFormatter.dateFormat = "yyyy 年 MM 月"
+//        lblCurrentYearMonth.text = myFormatter.string(from: currentDate)
+//        lblCurrentYearMonth.textAlignment = .center
         
         //不使用"拉"的方法，得使用此
         tableView.delegate = self
@@ -42,16 +42,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     //由導覽線換頁時
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let detailVC = segue.destination as! PostViewController
-            detailVC.tableViewController = self    //傳遞第一頁的執行實體給第二頁（引用型別傳遞）
-            if let rowIndex = self.tableView.indexPathForSelectedRow?.row {
-                detailVC.selectedRow = rowIndex    //傳遞目前選定列的索引給下一頁（值型別傳遞）
+        if segue.identifier == "segue1" {
+            let postVC = segue.destination as! PostViewController
+            postVC.tableViewController = self    //傳遞第一頁的執行實體給第二頁（引用型別傳遞）
+            
+            guard let rowIndex = self.tableView.indexPathForSelectedRow else {
+                return
             }
+            postVC.selectedRow = rowIndex.row
+            postVC.postRecords = days[rowIndex.section]
+            //            if let rowIndex = self.tableView.indexPathForSelectedRow {
+            //                postVC.xxx = days[rowIndex.section]
+            //                postVC.selectedRow = rowIndex  //傳遞目前選定列的索引給下一頁（值型別傳遞）
+            //                //print(rowIndex)
+            //            }
+        }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.getDataFromDB()
-        tableView.reloadData()    //畫面重現時，請TableView立即重整資料
+//        tableView.reloadData()    //畫面重現時，請TableView立即重整資料
     }
     func getDataFromDB() {
         //清除所有的陣列元素
@@ -62,41 +72,48 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         sqlite3_prepare(db, sql.cString(using: String.Encoding.utf8), -1, &statement, nil)    //執行查詢指令（-1代表不限定sql指令的長度，最後一個參數為預留參數，目前沒有作用）
         //往下讀一筆，如果讀到資料時
         while sqlite3_step(statement) == SQLITE_ROW {
-            let sId = Int(sqlite3_column_int(statement, 0))
-            let sYearMonth = String(cString: sqlite3_column_text(statement, 1))
-            let sCreateDate = String(cString: sqlite3_column_text(statement, 2))
-            let sCreateWeek = String(cString: sqlite3_column_text(statement, 3))
+            let id = sqlite3_column_int(statement, 0)
+            print("id:\(id)")
+            let sYearMonth = sqlite3_column_text(statement, 1)
+            let yearMonth = String(cString: sYearMonth!)
+            print("yearMonth:\(yearMonth)")
+            let sCreateDate = sqlite3_column_text(statement, 2)
+            let createDate = String(cString: sCreateDate!)
+            print("createDate:\(createDate)")
+            let sCreateWeek = sqlite3_column_text(statement, 3)
+            let createWeek = String(cString: sCreateWeek!)
+            print("createWeek:\(createWeek)")
             //取得第四個欄位（照片）
             var imgData:Data?    //用於記載檔案的每一個位元資料
             if let totalBytes = sqlite3_column_blob(statement, 5) {    //讀取檔案每一個位元的資料
                 let length = sqlite3_column_bytes(statement, 5)     //讀取檔案長度
                 imgData = Data(bytes: totalBytes, count: Int(length))    //將數位圖檔資訊，初始化成為Data物件
             }
-            let sTextView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
-            if sYearMonth != "" {
+            let textView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
+            if yearMonth != "" {
                 //                print("1days:\(days)")
-                if !days.contains(sYearMonth) {
+                if !days.contains(yearMonth) {
                     //                    print("2days:\(days)")
-                    days.append(sYearMonth)
-                    print("3days:\(days)")
-                    myRecords[sYearMonth] = []
+                    days.append(yearMonth)
+                    //                    print("3days:\(days)")
+                    myRecords[yearMonth] = []
                 }
-                //                myRecords[sYearMonth]?.append([
-                dicRow = [
-                    "Id":"\(sId)",
-                    "CreateDate":"\(sCreateDate)",
-                    "CreateWeek":"\(sCreateWeek)",
+                //                myRecords[yearMonth]?.append([
+                myRecords[yearMonth]?.append([
+                    "Id":"\(id)",
+                    "CreateDate":"\(createDate)",
+                    "CreateWeek":"\(createWeek)",
                     "Photo":imgData,
-                    "TextView":"\(sTextView)"
-                ]
-                print("dic array:\(dicRow)")
-                myRecords[sYearMonth]?.append(dicRow)
+                    "TextView":"\(textView)"
+                ])
+                //print("dic array:\(dicRow)")
+//                myRecords[yearMonth]?.append(dicRow)
                 print("myRecords：\(myRecords)")
                 
-    }
+            }
         }
         sqlite3_finalize(statement)    //關閉連線資料集
-        //        print("myRecords：\(myRecords)")
+                print("myRecords：\(myRecords)")
         tableView.reloadData()
     }
     // MARK: Table view data source
@@ -141,6 +158,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //選擇(點擊)後會變灰色，得取消選擇才復原
         tableView.deselectRow(at: indexPath, animated: true)
+        
+//        self.navigationController?.pushViewController(PostViewController(), animated: true)
     }
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 //            tableView.reloadData()
@@ -161,7 +180,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //MARK: -Buttons
     @IBAction func btnChange(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
-        print("tableView被釋放")
+//        print("tableView被釋放")
     }
     @IBAction func btnCalender(_ sender: UIBarButtonItem) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -179,8 +198,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         addViewController.tableViewController = self
         self.navigationController?.pushViewController(addViewController, animated: true)
 //        show(addViewController, sender: nil)
-        
     }
-    
 }
 

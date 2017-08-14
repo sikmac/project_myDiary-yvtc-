@@ -20,11 +20,10 @@ class AddViewController: UIViewController, UIImagePickerControllerDelegate, UINa
         //從AppDelegate取得資料庫連線
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             db = appDelegate.getDB()
-            print("連線成功２")
+//            print("連線成功２")
         }
         
         txtDate.delegate = self
-        self.title = "新增"
         myFormatter.dateFormat = "yyyy-MM-dd HH:mm EEE"
         
         // UIDatePicker

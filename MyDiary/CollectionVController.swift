@@ -5,7 +5,7 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
     @IBOutlet weak var collectionView: UICollectionView!    //先將collectionView建立屬性
     
     let myRefreshControl = UIRefreshControl()    //建立UIRefreshControl，存在常數myRefreshControl中
-    var myRecords :[String:[[String:String]]]! = [:]
+    var myRecords :[String:[[String:Any?]]] = [:]
     var days :[String]! = []
     
     var db:OpaquePointer? = nil
@@ -35,8 +35,6 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
                 return
             }
             print(rowIndex)
-            //            postVC.selectedItem = rowIndex
-            //            postVC.postRecords = days[rowIndex.section]
         }
     }
     //要顯示幾個Section(建立幾筆陣列資料這需更動)
@@ -60,10 +58,10 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
         }
         
         // 顯示的內容
-        cell.lblDate.text = records[indexPath.row]["CreateDate"]     //as? String
-        cell.lblWeek.text = records[indexPath.row]["CreateWeek"]     //as? String
-        cell.txtView.text = records[indexPath.row]["TextView"]     //as? String
-        //        cell.imgPicture.image = UIImage(data: ((records[indexPath.row]["Photo"]) as? Data)!)
+        cell.lblDate.text = records[indexPath.row]["CreateDate"] as? String
+        cell.lblWeek.text = records[indexPath.row]["CreateWeek"] as? String
+        cell.txtView.text = records[indexPath.row]["TextView"] as? String
+        cell.imgPicture.image = UIImage(data: ((records[indexPath.row]["Photo"]) as? Data)!)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -119,6 +117,7 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
                 let length = sqlite3_column_bytes(statement, 5)     //讀取檔案長度
                 imgData = Data(bytes: totalBytes, count: Int(length))    //將數位圖檔資訊，初始化成為Data物件
             }
+            
             let textView = String(cString: (sqlite3_column_text(statement, 6))!)    //轉換第二個欄位（swift字串）
             if yearMonth != "" {
                 //                print("1days:\(days)")
@@ -133,7 +132,7 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
                     "Id":"\(id)",
                     "CreateDate":"\(createDate)",
                     "CreateWeek":"\(createWeek)",
-                    //                    "Photo":imgData,
+                    "Photo":imgData,
                     "TextView":"\(textView)",
                     "CreateTime":"\(createTime)"
                     ])
@@ -152,8 +151,6 @@ class CollectionVController: UIViewController, UICollectionViewDataSource, UICol
     //讓collectionView執行reloadData方法更新資料
     //使用UIRefresh的endRreshing方法，讓refreshController停止轉動並隱藏
     func refreshList() {
-        //        diaryArray = diarySecondArray
-        //        diarySecondArray = diaryRefreshArray
         getDataFromDB()
         collectionView.reloadData()
         myRefreshControl.endRefreshing()
